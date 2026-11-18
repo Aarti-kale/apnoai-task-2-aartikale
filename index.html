@@ -53,7 +53,7 @@
 
   <script type="text/babel">
 
-    const { useState } = React;
+    const { useState, useEffect } = React;
 
     // ============================================
     // PROFILE CARD COMPONENT
@@ -74,6 +74,25 @@
       const [isDark, setIsDark] = useState(false);
       const [isConnected, setIsConnected] = useState(false);
       const [likes, setLikes] = useState(0);
+
+      // Typing animation for bio
+      const [typedBio, setTypedBio] = useState("");
+
+      useEffect(() => {
+        setTypedBio("");
+        let index = 0;
+
+        const typingTimer = setInterval(() => {
+          index++;
+          setTypedBio(bio.slice(0, index));
+
+          if (index >= bio.length) {
+            clearInterval(typingTimer);
+          }
+        }, 35);
+
+        return () => clearInterval(typingTimer);
+      }, [bio]);
 
       // Toggle theme
       const toggleTheme = () => {
@@ -167,7 +186,7 @@
                 isDark ? 'text-gray-300' : 'text-gray-800'
               }`}
             >
-              {bio}
+              {typedBio}
             </p>
 
 
